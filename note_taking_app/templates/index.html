@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note-Taking App</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Note-Taking App</h1>
+    </header>
+    <main>
+      
+
+        <!-- Add Note Form -->
+        <section id="add-note-section">
+            <h2>Add a Note</h2>
+            <form action="/add" method="POST" id="note-form">
+                <input type="text" name="title" id="title" placeholder="Note Title" required>
+                <textarea name="content" id="content" placeholder="Note Content" rows="4" required></textarea>
+                <button type="submit">Add Note</button>
+            </form>
+        </section>
+
+        <!-- Record and Upload Voice Note -->
+        <section id="voice-note-section">
+            <h2>Record or Upload a Voice Note</h2>
+
+            <!-- Recording Controls -->
+            <div class="controls">
+                <button id="startBtn" onclick="startRecording()">Start Recording</button>
+                <button id="stopBtn" onclick="stopRecording()" disabled>Stop Recording</button>
+            </div>
+            <div id="status" class="recording-status"></div>
+            <div id="audioPlayer" style="display: none;">
+                <h3>Recorded Note:</h3>
+                <audio id="audio" controls></audio>
+            </div>
+            <div class="notes">
+                <ul id="noteList">
+                    <!-- Recorded Notes -->
+                </ul>
+            </div>
+
+            <!-- Upload Voice Note -->
+            <form action="/voice" method="POST" enctype="multipart/form-data" id="voice-form">
+                <input type="file" name="audio" accept="audio/*" required>
+                <button type="submit">Upload Voice Note</button>
+            </form>
+        </section>
+
+          <!-- Display Notes -->
+          <section id="notes-section">
+            <h2>Your Notes</h2>
+            <div id="notes-container">
+                {% for note in notes %}
+                <div class="note">
+                    <span class="note-title">{{ note[1] }}</span>
+                    <a href="/delete/{{ note[0] }}" class="delete-btn">Delete</a>
+                    <p class="note-content">{{ note[2] }}</p>
+                </div>
+                {% else %}
+                <p class="no-notes">No notes available. Add a new note below!</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Note-Taking App. All rights reserved. Okoh Kingsley</p>
+    </footer>
+    <script src="../static/app.js"></script>
+</body>
+</html>
