@@ -26,20 +26,7 @@ def get_notes():
     except Exception as e:
         print(f"Error fetching notes: {e}")
         return []
-    # cursor.execute("SELECT id, title, content FROM notes")
-    # return cursor.fetchall()
-# def get_notes():
-#     try:
-#         cursor = db.cursor()
-#         cursor.execute("SELECT id, title, content FROM notes")
-#         notes = cursor.fetchall()
-#         # Debugging: Check if results are fetched properly
-#         cursor.close()
-#         return notes
-#     except Exception as e:
-#         print(f"Error retrieving notes: {e}")
-#         return []
-
+ 
 def add_note_to_db(title, content):
     cursor.execute("INSERT INTO notes (title, content) VALUES (%s, %s)", (title, content))
     db.commit()
@@ -69,20 +56,3 @@ def update_note_in_db(note_id, title, content):
      
 
 
-
-# def update_note_in_db(note_id, title, content):
-#     try:
-#         cursor = db.cursor()
-#         query = """
-#         UPDATE notes
-#         SET title = %s, content = %s
-#         WHERE id = %s
-#         """
-#         print(f"Executing query: {query} with params: {title}, {content}, {note_id}")
-#         cursor.execute(query, (title, content, note_id))
-#         db.commit()
-#         cursor.close()
-#         return True
-#     except Exception as e:
-#         print(f"Error updating note: {e}")
-#         return False
