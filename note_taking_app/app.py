@@ -1,50 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify
+from utils.db import  get_notes, add_note_to_db, delete_note_from_db, edit_note_in_db, update_note_in_db
+from utils.file_utils import generate_txt, generate_docx
+from utils.pdf_utils import generate_pdf
 import speech_recognition as sr
-import mysql.connector
-from dotenv import load_dotenv
+
 import os
 import tempfile
 
-# Load environment variables from .env file
-load_dotenv()
+
 
 # Flask App
 app = Flask(__name__)
 
-# MySQL Database Connection
-db = mysql.connector.connect(
-    host=os.getenv("DB_HOST"),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD"),
-    database=os.getenv("DB_NAME")
-)
-cursor = db.cursor()
-
-# Create Notes Table if not exists
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS notes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL
-)
-""")
-db.commit()
-
-# Helper Functions
-def get_notes():
-    """Fetch all notes from the database."""
-    cursor.execute("SELECT id, title, content FROM notes")
-    return cursor.fetchall()
-
-def add_note_to_db(title, content):
-    """Add a new note to the database."""
-    cursor.execute("INSERT INTO notes (title, content) VALUES (%s, %s)", (title, content))
-    db.commit()
-
-def delete_note_from_db(note_id):
-    """Delete a note from the database."""
-    cursor.execute("DELETE FROM notes WHERE id = %s", (note_id,))
-    db.commit()
 
 # Routes
 @app.route ("/")
@@ -68,6 +35,54 @@ def delete_note(note_id):
     delete_note_from_db(note_id)
     return redirect(url_for("index"))
 
+@app.route("/edit/<int:note_id>", methods=["POST"])
+def edit_note(note_id):
+    """Edit a saved note."""
+    data = request.json
+    title = data.get("title", "").strip()
+    content = data.get("content", "").strip()
+    if title and content:
+        edit_note_in_db(note_id, title, content)
+        return jsonify({"message": "Note updated successfully!"}), 200
+    return jsonify({"message": "Invalid data."}), 400
+
+@app.route("/download/<int:note_id>/<format>")
+def download_note(note_id, format):
+    """Download a note in the specified format."""
+    note = next((n for n in get_notes() if n[0] == note_id), None)
+    if not note:
+        return "Note not found", 404
+
+    title, content = note[1], note[2]
+    if format == "txt":
+        file_path = generate_txt(title, content)
+    elif format == "pdf":
+        file_path = generate_pdf(title, content)
+    elif format == "docx":
+        file_path = generate_docx(title, content)
+    else:
+        return "Invalid format", 400
+
+    return send_file(file_path, as_attachment=True)
+@app.route('/update-note', methods=['POST'])
+def update_note():
+    data = request.json
+    print(f"Received data: {data}")
+    note_id = data.get('id')  # Ensure the ID is passed in the request
+    title = data.get('title')
+    content = data.get('content')
+
+    if not all([note_id, title, content]):
+        return jsonify({'error': 'Invalid data provided'}), 400
+
+    success = update_note_in_db(note_id, title, content)
+    if success:
+        print("Note updated successfully")
+        print(f"Updated notes: {get_notes()}") 
+        return jsonify({'message': 'Note updated successfully'}), 200
+    else:
+        print("Failed to update note")
+        return jsonify({'error': 'Failed to update the note'}), 500
 @app.route("/voice", methods=["POST"])
 def voice_note():
     """Add a note using voice input."""
@@ -105,4 +120,4 @@ def voice_note():
 
 # Run the App
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=5000,debug=True)

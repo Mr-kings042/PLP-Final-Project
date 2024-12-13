@@ -68,3 +68,79 @@ function uploadVoiceNote(blob) {
             document.getElementById("status").textContent = "Error uploading voice note.";
         });
 }
+
+document.querySelectorAll('.note').forEach(note => {
+    const titleElement = note.querySelector('.note-title');
+    const contentElement = note.querySelector('.note-content');
+    const editButton = note.querySelector('.edit-btn');
+    const saveButton = note.querySelector('.save-btn');
+
+    // Assume each note has a data attribute with its ID
+    const noteId = note.dataset.id;
+
+    editButton.addEventListener('click', () => {
+        titleElement.setAttribute('contenteditable', 'true');
+        contentElement.setAttribute('contenteditable', 'true');
+        editButton.style.display = 'none';
+        saveButton.style.display = 'inline-block';
+        titleElement.classList.add('editable');
+        contentElement.classList.add('editable');
+    });
+
+    saveButton.addEventListener('click', () => {
+        titleElement.setAttribute('contenteditable', 'false');
+        contentElement.setAttribute('contenteditable', 'false');
+        editButton.style.display = 'inline-block';
+        saveButton.style.display = 'none';
+        titleElement.classList.remove('editable');
+        contentElement.classList.remove('editable');
+
+
+        const noteId = noteElement.id.replace("note-", "");
+        const updatedTitle = titleElement.textContent.trim();
+        const updatedContent = contentElement.textContent.trim();
+
+        fetch('/update-note', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: noteId,
+                title: updatedTitle,
+                content: updatedContent,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                console.log(data.message);
+            } else {
+                console.error(data.error);
+            }
+        })
+        .catch(err => console.error('Error updating note:', err));
+    });
+});
+
+fetch("/get-notes", {
+    method: "GET",
+    headers: { "Cache-Control": "no-cache" }
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data); // Ensure the most recent notes are fetched
+});
+
+
+// function downloadNote(title, content) {
+//     const blob = new Blob([`Title: ${title}\n\n${content}`], { type: "text/plain" });
+//     const url = URL.createObjectURL(blob);
+//     const a = document.createElement("a");
+//     a.href = url;
+//     a.download = `${title}.pdf`; // Change to `.pdf`, `.docx`, or `.png` if needed
+//     document.body.appendChild(a);
+//     a.click();
+//     document.body.removeChild(a);
+//     URL.revokeObjectURL(url);
+// }

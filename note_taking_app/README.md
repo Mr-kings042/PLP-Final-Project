@@ -1,4 +1,4 @@
-# Note-Taking App with MySQL and Voice Notes
+# Note-Taking App 
 
 This is a web-based note-taking application built with Flask, MySQL, and Python's SpeechRecognition library. It supports text-based and voice note-taking.
 
@@ -31,4 +31,4 @@ This is a web-based note-taking application built with Flask, MySQL, and Python'
 2. Use pip to install the necessary dependencies:
  ```bash
  pip install -r requirements.txt
-python run app
+python app.py

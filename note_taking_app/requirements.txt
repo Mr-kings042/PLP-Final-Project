@@ -1,3 +1,6 @@
 Flask
 SpeechRecognition
 mysql-connector-python
+python-dotenv
+fpdf
+python-docx

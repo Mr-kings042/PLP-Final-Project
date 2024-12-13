@@ -55,15 +55,26 @@
             <h2>Your Notes</h2>
             <div id="notes-container">
                 {% for note in notes %}
-                <div class="note">
-                    <span class="note-title">{{ note[1] }}</span>
-                    <a href="/delete/{{ note[0] }}" class="delete-btn">Delete</a>
-                    <p class="note-content">{{ note[2] }}</p>
+                <div class="note" id="note-{{ note[0] }}">
+                    <span class="note-title" contenteditable="false">{{ note.title }}</span>
+                    <p class="note-content" contenteditable="false">{{ note.content }}</p>
+                    <button class="edit-btn" >Edit</button>
+                    <button class="save-btn" style="display: none;">Save</button>
+                   <button> <a href="/delete/{{ note[0] }}" class="delete-btn">Delete</a></button>
+                   <div class="dropdown">
+                    <button class="dropdown-btn">Download</button>
+                    <div class="dropdown-content">
+                        <a href="/download/{{ note[0] }}/txt">Download TXT</a>
+                        <a href="/download/{{ note[0] }}/pdf">Download PDF</a>
+                        <a href="/download/{{ note[0] }}/docx">Download DOCX</a>
+                    </div>
+                </div>
                 </div>
                 {% else %}
                 <p class="no-notes">No notes available. Add a new note below!</p>
                 {% endfor %}
             </div>
+            
         </section>
     </main>
 

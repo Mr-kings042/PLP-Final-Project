@@ -74,14 +74,18 @@ h2 {
     font-weight: bold;
     font-size: 1.2rem;
     margin-bottom: 10px;
-    color: #333;
+    color: #000000;
+    outline: none;
 }
+
+   
 
 .delete-btn {
     color: #ff4d4d;
     font-size: 0.9rem;
     text-decoration: none;
     transition: color 0.3s ease;
+
 }
 
 .delete-btn:hover {
@@ -89,9 +93,10 @@ h2 {
 }
 
 .note-content {
-    font-size: 1rem;
-    color: #666;
+    font-size: 2rem;
+    color: #000000;
     margin-top: 10px;
+    outline: none;
 }
 
 /* Voice Note Section */
@@ -120,6 +125,8 @@ button {
     border: 1px solid #ddd;
     border-radius: 5px;
     cursor: pointer;
+    margin-bottom: 10px;
+    margin-top: 10px;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
@@ -192,6 +199,59 @@ audio {
 #note-form button:hover {
     background-color: #5a4ccc;
     transform: scale(1.05);
+}
+/* Dropdown Button */
+.dropdown {
+    position: relative;
+    display: inline-block;
+
+}
+
+.dropdown-btn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.dropdown-btn:hover {
+    background-color: #45a049;
+}
+
+/* Dropdown Content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Show the dropdown content on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 /* Footer Styles */
