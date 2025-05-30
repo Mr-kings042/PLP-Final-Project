@@ -31,8 +31,6 @@ This is a web-based note-taking application built with Flask, MySQL, and Python'
 2. Use pip to install the necessary dependencies:
  ```bash
  pip install -r requirements.txt
-<<<<<<< HEAD
+
 python app.py
-=======
-python run app
->>>>>>> bf005d6962d5b17e2811686f76423427e3af2cf3
+```
