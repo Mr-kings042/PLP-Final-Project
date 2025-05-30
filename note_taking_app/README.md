@@ -26,8 +26,8 @@ This is a web-based note-taking application built with Flask, MySQL, and Python'
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/note-taking-app.git
-   cd note-taking-app
+   git clone https://github.com/Mr-kings042/PLP-Final-Project.git
+   cd PLP-Final_project/note-taking-app
 2. Use pip to install the necessary dependencies:
  ```bash
  pip install -r requirements.txt
